@@ -1,25 +1,32 @@
 #include <iostream>
 #include <cmath>
-#include <format>
+#include <map>
 
-class Iteration {
+
+class EuclideanStep {
     public:
         int number, p, q, r, b;
 };
 
-void iterationMaker(int iterationNumber, int p, int q, int b, int r) {
-    Iteration iteration;
-    iteration.number = iterationNumber;
-    iteration.p = p;
-    iteration.q = q;
-    iteration.b = b;
-    iteration.r = r;
+std::map<int, EuclideanStep> euclideanSteps;
+
+void stepRecorder(int stepNumber, int p, int q, int b, int r) {
+    EuclideanStep step;
+    step.number = stepNumber;
+    step.p = p;
+    step.q = q;
+    step.b = b;
+    step.r = r;
+
+    euclideanSteps[stepNumber] = step;
 }
 
 int main() {
 
+    
+
     int tempInput_1, tempInput_2, p, q, r, b;
-    int iterationNumber = 0, rearragneNumber = 0, a = 1;
+    int stepNumber = 0, rearragementNumber = 0, a = 1;
     bool isOnGoing = true;
 
     std::cout << "GCD Calculator (Euclidian Algorithm)\n"
@@ -39,9 +46,9 @@ int main() {
     while(isOnGoing){
         b = static_cast<int>(p/q);
         r = p % q;
-        iterationNumber++;
-        iterationMaker(iterationNumber, p, q, b, r);
-        std::cout << "\nIteration Number " << iterationNumber << ": " << p << " = " << b << '(' << q << ") + " << r << std::endl;
+        stepNumber++;
+        stepRecorder(stepNumber, p, q, b, r);
+        std::cout << "\nStep Number " << stepNumber << ": " << p << " = " << b << '(' << q << ") + " << r << std::endl;
 
         p = q;
         q = r;
@@ -50,7 +57,7 @@ int main() {
         else {isOnGoing = false;}
     }
 
-    std::cout << "\nNow, we will rearrange each iteration to solve for the remainder (r):" << std::endl;
+    std::cout << "\nNow, we will rearrange each step to solve for the remainder (r):" << std::endl;
 
     
     
