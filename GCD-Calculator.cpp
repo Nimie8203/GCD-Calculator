@@ -27,14 +27,15 @@ void stepRecorder(int stepNumber, int p, int q, int b, int r) {
 
 
 
-int subsituteFinder(int numberTofind){
+int subsituteFinder(int numberTofind, char variable) {
     for(auto indexer = euclideanSteps.begin(); indexer->first <= euclideanSteps.end()->first; indexer++){
         if(indexer->second.r = numberTofind) {
-            return indexer->second.r;
+            return indexer->second.p, indexer->second.q, indexer->second.b;
         }
+        else continue;
     }
 }
-
+//THERE IS A PROBLEM HERE
 
 
 int main() {
@@ -87,14 +88,20 @@ int main() {
     }
 
     std::cout << "\n\nNow, we will take " << euclideanSteps.rbegin()->second.r << " = " << a << '('
-    << euclideanSteps.rbegin()->second.p << ") - " << euclideanSteps.rbegin()->second.b << '('
-    << euclideanSteps.rbegin()->second.q << ')' << " and start subsituting the numbers inside the parentheses:\n" << std::endl;
+              << euclideanSteps.rbegin()->second.p << ") - " << euclideanSteps.rbegin()->second.b << '('
+              << euclideanSteps.rbegin()->second.q << ')' << " and start subsituting the numbers inside the parentheses:\n" << std::endl;
 
-    
+    //THIS PART IS DOING SOMETHING BUT I DONT KNOW WHAT
     while(isSubsituting){
-        int tempSubsitution_1, tempSubsitution_2;
-        tempSubsitution_1 = subsituteFinder(euclideanSteps.rbegin()->second.p);
-
+        int subsitutionStepNumber = 1, tempP, tempQ, tempR, tempB, tempA = 1;
+        tempP = subsituteFinder(euclideanSteps.rbegin()->second.p);
+        tempQ = subsituteFinder(euclideanSteps.rbegin()->second.q);
+        tempR = subsituteFinder(euclideanSteps.rbegin()->second.r);
+        tempB = subsituteFinder(euclideanSteps.rbegin()->second.b);
+        std::cout << "The subsitution step " << subsitutionStepNumber << " is: " << tempR << " = " << tempA << '(' << tempP << ") - "
+                  << tempB << '(' << tempQ << ')';
+        subsitutionStepNumber++;
+        break;
     }
 
 
