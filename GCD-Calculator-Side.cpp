@@ -31,7 +31,7 @@ void extendedEuclidean(int initialInput_1, int initialInput_2) {
     int a_0 = 1, a_1 = 0, b_0 = 0, b_1 = 1;
     bool isSubstituting = true;
 
-    std::cout << "\n\nNow, we will compute the coefficients using the Extended Euclidean Algorithm:\n" << std::endl;
+    std::cout << "\nComputing the coefficients using the Extended Euclidean Algorithm..." << std::endl;
     for (const auto& [stepNumber, step] : euclideanSteps) {
         if (step.r == 0) break;
 
@@ -43,10 +43,12 @@ void extendedEuclidean(int initialInput_1, int initialInput_2) {
         b_0 = b_1;
         b_1 = b;
 
-        std::cout << "Step " << stepNumber << ": " << step.r << " = (" << a << ")(" << initialInput_1 << ") + (" << b << ")(" << initialInput_2 << ")\n";
+        std::cout << "-Step " << stepNumber << ": " << step.r << " = (" << a << ")(" << initialInput_1 << ") + (" << b << ")(" 
+                  << initialInput_2 << ")\n";
     }
     
-    std::cout << "\nGCD(" << initialInput_1 << ", " << initialInput_2 << ") = " << a_0 << "(" << initialInput_1 << ") + " << b_0 << "(" << initialInput_2 << ")";
+    std::cout << "\nGCD(" << initialInput_1 << ", " << initialInput_2 << ") = " << a_0 << "(" << initialInput_1 << ") + " << b_0
+              << "(" << initialInput_2 << ")" <<std::endl;
 }
 
 
@@ -69,33 +71,34 @@ int main() {
     if(input_1 > input_2)       {p = input_1; q = input_2;}
     else if(input_2 > input_1)  {p = input_2; q = input_1;}
     else if(input_1 == input_2) {std::cout << "GCD is " << input_1 << std::endl; return 0;}
-    else                                {std::cout << "Invalid input!"; return 0;}
 
-    std::cout << "\n\n" << p << " is greater than " << q << ". So, we will have:\n" << std::endl;
+    std::cout << "\n" << p << " is greater than " << q << ". So, we will have:" << std::endl;
 
 
 
     while(true){
+        int gCD = 0;
         b = static_cast<int>(p/q);
         r = p % q;
+
         stepNumber++;
         stepRecorder(stepNumber, p, q, b, r);
-        std::cout << "Step " << stepNumber << ": " << p << " = " << b << "(" << q << ") + " << r << std::endl;
+        std::cout << "-Step " << stepNumber << ": " << p << " = " << b << "(" << q << ") + " << r << std::endl;
 
         p = q;
         q = r;
         
 
-        if(r > 1) {continue;}
-        else if(r == 1) {std::cout << "\nThe numbers are prime relative to eachother!"  << std::endl; break;}
-        else if(r == 0) {std::cout << "\nHere is the GCD: " << p << std::endl; return 0;}
+        if(r > 1) {gCD = r; continue;}
+        else if(r == 1) {std::cout << "\nThe numbers are prime relative to eachother! "; break;}
+        else if(r == 0 && gCD == 0) {std::cout << "\nHere is the GCD: " << p << std::endl; return 0;}
     }
 
     while(true){
-        std::cout << "\nWould you like to get the inverse of these two numbers?(Y/N) ";
+        std::cout << "Would you like to get the inverse of these two numbers?(Y/N) ";
         std::cin >> choice;
     
-        if(choice == 'y' || choice == 'Y') {extendedEuclidean(input_1, input_2);}
+        if(choice == 'y' || choice == 'Y') {extendedEuclidean(input_1, input_2); break;}
         else if(choice == 'n' || choice == 'N') {std::cout << "Exiting..." << std::endl; break;}
         else {std::cout << "Invalid Input!" << std::endl;}
     }
