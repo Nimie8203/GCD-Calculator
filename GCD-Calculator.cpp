@@ -3,6 +3,7 @@
 #include <map>
 
 
+
 class EuclideanStep {
     public:
         int number, p, q, r, b;
@@ -21,89 +22,87 @@ void stepRecorder(int stepNumber, int p, int q, int b, int r) {
     step.q = q;
     step.b = b;
     step.r = r;
-
     euclideanSteps[stepNumber] = step;
 }
 
 
 
-int subsituteFinder(int numberTofind, char variable) {
-    for(auto indexer = euclideanSteps.begin(); indexer->first <= euclideanSteps.end()->first; indexer++){
-        if(indexer->second.r = numberTofind) {
-            return indexer->second.p, indexer->second.q, indexer->second.b;
-        }
-        else continue;
+void extendedEuclidean(int initialInput_1, int initialInput_2) {
+    int a_0 = 1, a_1 = 0, b_0 = 0, b_1 = 1;
+    bool isSubstituting = true;
+
+    std::cout << "\nComputing the coefficients using the Extended Euclidean Algorithm..." << std::endl;
+    for (const auto& [stepNumber, step] : euclideanSteps) {
+        if (step.r == 0) break;
+
+        int a = a_0 - step.b * a_1;
+        int b = b_0 - step.b * b_1;
+
+        a_0 = a_1;
+        a_1 = a;
+        b_0 = b_1;
+        b_1 = b;
+
+        std::cout << "-Step " << stepNumber << ": " << step.r << " = (" << a << ")(" << initialInput_1 << ") + (" << b << ")(" 
+                  << initialInput_2 << ")\n";
     }
+    
+    std::cout << "\nGCD(" << initialInput_1 << ", " << initialInput_2 << ") = " << a_0 << "(" << initialInput_1 << ") + " << b_0
+              << "(" << initialInput_2 << ")" <<std::endl;
 }
-//THERE IS A PROBLEM HERE
+
 
 
 int main() {
-
-    int tempInput_1, tempInput_2, p, q, r, b;
-    int stepNumber = 0, a = 1;
-    bool isOnGoing = true, isSubsituting = true;
+    int input_1, input_2, p, q, r, previousR, b, stepNumber = 0;
+    char choice;
 
 
 
-    std::cout << "GCD Calculator (Euclidian Algorithm)\n"
+    std::cout << "GCD Calculator (Euclidean Algorithm)\n"
               << "Enter the first number: ";
-    std::cin >> tempInput_1;
+    std::cin >> input_1;
     
     std::cout << "Enter the second number: ";
-    std::cin >> tempInput_2;
+    std::cin >> input_2;
 
 
 
-    if(tempInput_1 > tempInput_2)       {p = tempInput_1; q = tempInput_2;}
-    else if(tempInput_2 > tempInput_1)  {p = tempInput_2; q = tempInput_1;}
-    else if(tempInput_1 = tempInput_2)  {std::cout << "GCD is " << tempInput_1 << std::endl;}
-    else                                {std::cout << "Invalid input!";}
+    if(input_1 > input_2)       {p = input_1; q = input_2;}
+    else if(input_2 > input_1)  {p = input_2; q = input_1;}
+    else if(input_1 == input_2) {std::cout << "GCD is " << input_1 << std::endl; return 0;}
 
-    std::cout << "\n\n" << p << " is greater than " << q << ". So, we will have:\n" << std::endl;
-
+    std::cout << "\n" << p << " is greater than " << q << ". So, we will have:" << std::endl;
 
 
-    while(isOnGoing){
+
+    while(true){
+        int gCD = 0;
         b = static_cast<int>(p/q);
         r = p % q;
+
         stepNumber++;
         stepRecorder(stepNumber, p, q, b, r);
-        std::cout << "Step Number " << stepNumber << ": " << p << " = " << b << '(' << q << ") + " << r << std::endl;
+        std::cout << "-Step " << stepNumber << ": " << p << " = " << b << "(" << q << ") + " << r << std::endl;
 
         p = q;
         q = r;
+        
 
-        if(r != 1) {isOnGoing = true;}
-        else {isOnGoing = false;}
+        if(r > 1) {gCD = r; continue;}
+        else if(r == 1) {std::cout << "\nThe numbers are prime relative to eachother! "; break;}
+        else if(r == 0 && gCD == 0) {std::cout << "\nHere is the GCD: " << p << std::endl; return 0;}
     }
 
-
-
-    std::cout << "\n\nNow, we will rearrange each step to solve for the remainder (r):\n" << std::endl;
+    while(true){
+        std::cout << "Would you like to get the inverse of these two numbers?(Y/N) ";
+        std::cin >> choice;
     
-    for(int i = 1; i <= euclideanSteps.size(); i++){
-        std::cout << euclideanSteps[i].r << " = " << a << '(' << euclideanSteps[i].p << ") - "
-                  << b << '(' << euclideanSteps[i].q << ')' << std::endl;
+        if(choice == 'y' || choice == 'Y') {extendedEuclidean(input_1, input_2); break;}
+        else if(choice == 'n' || choice == 'N') {std::cout << "Exiting..." << std::endl; break;}
+        else {std::cout << "Invalid Input!" << std::endl;}
     }
-
-    std::cout << "\n\nNow, we will take " << euclideanSteps.rbegin()->second.r << " = " << a << '('
-              << euclideanSteps.rbegin()->second.p << ") - " << euclideanSteps.rbegin()->second.b << '('
-              << euclideanSteps.rbegin()->second.q << ')' << " and start subsituting the numbers inside the parentheses:\n" << std::endl;
-
-    //THIS PART IS DOING SOMETHING BUT I DONT KNOW WHAT
-    while(isSubsituting){
-        int subsitutionStepNumber = 1, tempP, tempQ, tempR, tempB, tempA = 1;
-        tempP = subsituteFinder(euclideanSteps.rbegin()->second.p);
-        tempQ = subsituteFinder(euclideanSteps.rbegin()->second.q);
-        tempR = subsituteFinder(euclideanSteps.rbegin()->second.r);
-        tempB = subsituteFinder(euclideanSteps.rbegin()->second.b);
-        std::cout << "The subsitution step " << subsitutionStepNumber << " is: " << tempR << " = " << tempA << '(' << tempP << ") - "
-                  << tempB << '(' << tempQ << ')';
-        subsitutionStepNumber++;
-        break;
-    }
-
+    
 
 
     return 0;
